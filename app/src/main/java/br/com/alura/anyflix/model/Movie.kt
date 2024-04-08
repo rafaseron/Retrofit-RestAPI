@@ -1,6 +1,6 @@
 package br.com.alura.anyflix.model
 
-import br.com.alura.anyflix.database.entities.MovieEntity
+import br.com.alura.anyflix.room.entities.MovieEntity
 import java.util.UUID
 
 data class Movie(

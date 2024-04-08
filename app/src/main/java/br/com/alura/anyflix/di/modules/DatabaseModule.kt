@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import br.com.alura.anyflix.database.AnyflixDatabase
-import br.com.alura.anyflix.database.dao.MovieDao
+import br.com.alura.anyflix.room.database.AnyflixDatabase
+import br.com.alura.anyflix.room.dao.MovieDao
 import br.com.alura.anyflix.model.toMovieEntity
+import br.com.alura.anyflix.room.repository.MovieRepository
 import br.com.alura.anyflix.sampleData.sampleMovies
 import dagger.Module
 import dagger.Provides
@@ -48,10 +49,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(
-        @ApplicationContext context: Context,
-        callback: AnyflixDatabaseCallback
-    ): AnyflixDatabase {
+    fun provideDatabase(@ApplicationContext context: Context, callback: AnyflixDatabaseCallback): AnyflixDatabase {
         return INSTANCE ?: synchronized(this) {
             Room.databaseBuilder(
                 context,
@@ -67,6 +65,11 @@ object DatabaseModule {
     @Provides
     fun provideMovieDao(db: AnyflixDatabase): MovieDao {
         return db.movieDao()
+    }
+
+    @Provides
+    fun provideMovieRepository(db: AnyflixDatabase): MovieRepository{
+        return MovieRepository(db)
     }
 
 }

@@ -2,25 +2,27 @@ package br.com.alura.anyflix.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.alura.anyflix.database.dao.MovieDao
-import br.com.alura.anyflix.database.entities.toMovie
+import br.com.alura.anyflix.room.dao.MovieDao
+import br.com.alura.anyflix.room.entities.toMovie
 import br.com.alura.anyflix.model.Movie
-import br.com.alura.anyflix.ui.uistates.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+sealed class HomeUiState {
+    object Loading : HomeUiState()
+    object Empty : HomeUiState()
+    data class Success(val sections: Map<String, List<Movie>> = emptyMap(), val mainBannerMovie: Movie? = null): HomeUiState()
+
+}
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val dao: MovieDao
-) : ViewModel() {
+class HomeViewModel @Inject constructor(private val dao: MovieDao): ViewModel() {
 
     private var currentUiStateJob: Job? = null
-    private val _uiState = MutableStateFlow<HomeUiState>(
-        HomeUiState.Loading
-    )
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {

@@ -1,4 +1,4 @@
-package br.com.alura.anyflix.navigation
+package br.com.alura.anyflix.navigation.navHost
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
@@ -7,6 +7,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import br.com.alura.anyflix.navigation.homeRoute
+import br.com.alura.anyflix.navigation.homeScreen
+import br.com.alura.anyflix.navigation.movieDetailsRouteFullpath
+import br.com.alura.anyflix.navigation.movieDetailsScreen
+import br.com.alura.anyflix.navigation.myListRoute
+import br.com.alura.anyflix.navigation.myListScreen
+import br.com.alura.anyflix.navigation.navigateToHome
+import br.com.alura.anyflix.navigation.navigateToMovieDetails
+import br.com.alura.anyflix.navigation.navigateToMyList
 import br.com.alura.anyflix.ui.components.BottomAppBarItem
 
 @Composable

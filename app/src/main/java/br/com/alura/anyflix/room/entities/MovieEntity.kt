@@ -1,4 +1,4 @@
-package br.com.alura.anyflix.database.entities
+package br.com.alura.anyflix.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

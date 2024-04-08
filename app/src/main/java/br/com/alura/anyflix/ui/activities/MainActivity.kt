@@ -1,7 +1,6 @@
-package br.com.alura.anyflix
+package br.com.alura.anyflix.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -33,11 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.anyflix.navigation.AnyflixNavHost
+import br.com.alura.anyflix.R
+import br.com.alura.anyflix.navigation.navHost.AnyflixNavHost
 import br.com.alura.anyflix.navigation.homeRoute
 import br.com.alura.anyflix.navigation.movieDetailsRouteFullpath
 import br.com.alura.anyflix.navigation.myListRoute
-import br.com.alura.anyflix.navigation.navigateToBottomAppBarItem
+import br.com.alura.anyflix.navigation.navHost.navigateToBottomAppBarItem
 import br.com.alura.anyflix.ui.components.AnyflixBottomAppBar
 import br.com.alura.anyflix.ui.components.BottomAppBarItem
 import br.com.alura.anyflix.ui.theme.AnyFlixTheme

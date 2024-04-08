@@ -1,10 +1,10 @@
-package br.com.alura.anyflix.database.dao
+package br.com.alura.anyflix.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import br.com.alura.anyflix.database.entities.MovieEntity
+import br.com.alura.anyflix.room.entities.MovieEntity
 import br.com.alura.anyflix.model.Movie
 import kotlinx.coroutines.flow.Flow
 
