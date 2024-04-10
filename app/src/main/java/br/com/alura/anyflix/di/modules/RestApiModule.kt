@@ -5,6 +5,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -15,10 +17,11 @@ interface RestApiModule{
     companion object{
         @Provides
         @Singleton
-        fun provideRetrofit(): Retrofit {
+        fun provideRetrofit(client: OkHttpClient): Retrofit {
             return Retrofit.Builder()
                 .baseUrl("http://192.168.100.36:8080/")
                 .addConverterFactory(MoshiConverterFactory.create())
+                .client(client)
                 .build()
         }
 
@@ -26,6 +29,22 @@ interface RestApiModule{
         @Singleton
         fun provideMovieService (retrofit: Retrofit): MovieService{
             return retrofit.create(MovieService::class.java)
+        }
+
+        @Provides
+        @Singleton
+        fun provideLogInterceptor(): HttpLoggingInterceptor{
+            return HttpLoggingInterceptor().apply {
+                setLevel(HttpLoggingInterceptor.Level.BODY)
+            }
+        }
+
+        @Provides
+        @Singleton
+        fun provideOkHttpClient(httpLogginInterceptor: HttpLoggingInterceptor): OkHttpClient{
+            return OkHttpClient.Builder()
+                .addInterceptor(httpLogginInterceptor)
+                .build()
         }
 
     }
