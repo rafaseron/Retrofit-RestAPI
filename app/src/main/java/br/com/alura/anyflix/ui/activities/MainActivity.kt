@@ -59,7 +59,6 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             val movieList = movieService.getAll()
-            Log.e("movieService", "movieList -> $movieList")
         }
 
         setContent {
