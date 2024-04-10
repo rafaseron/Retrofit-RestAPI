@@ -14,9 +14,12 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+
+
 sealed class MovieDetailsUiState {
     object Loading : MovieDetailsUiState()
-    data class Sucess(val movie: Movie, val suggestedMovies: List<Movie> = emptyList()): MovieDetailsUiState()
+    data class Success(val movie: Movie, val suggestedMovies: List<Movie> = emptyList()): MovieDetailsUiState()
 }
 
 @HiltViewModel
@@ -45,7 +48,7 @@ class MovieDetailsViewModel @Inject constructor(private val savedStateHandle: Sa
             }.flatMapLatest { movie ->
                 dao.suggestedMovies(movie.id)
                     .map { suggestedMovies ->
-                        MovieDetailsUiState.Sucess(
+                        MovieDetailsUiState.Success(
                             movie = movie,
                             suggestedMovies = suggestedMovies,
                         )

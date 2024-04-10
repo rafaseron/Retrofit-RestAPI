@@ -39,7 +39,7 @@ import androidx.compose.ui.zIndex
 import br.com.alura.anyflix.model.Movie
 import br.com.alura.anyflix.sampleData.sampleMovies
 import br.com.alura.anyflix.ui.theme.AnyFlixTheme
-import br.com.alura.anyflix.ui.uistates.MyListUiState
+import br.com.alura.anyflix.ui.viewmodels.MyListUiState
 import coil.compose.AsyncImage
 
 @Composable

@@ -33,7 +33,7 @@ import br.com.alura.anyflix.sampleData.sampleMovieSections
 import br.com.alura.anyflix.sampleData.sampleMovies
 import br.com.alura.anyflix.ui.components.AnyflixMainBanner
 import br.com.alura.anyflix.ui.theme.AnyFlixTheme
-import br.com.alura.anyflix.ui.uistates.HomeUiState
+import br.com.alura.anyflix.ui.viewmodels.HomeUiState
 import coil.compose.AsyncImage
 
 @Composable
