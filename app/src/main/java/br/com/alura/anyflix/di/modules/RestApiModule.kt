@@ -17,7 +17,7 @@ interface RestApiModule{
         @Singleton
         fun provideRetrofit(): Retrofit {
             return Retrofit.Builder()
-                .baseUrl("http://localhost:8080/")
+                .baseUrl("http://192.168.100.36:8080/")
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
         }
