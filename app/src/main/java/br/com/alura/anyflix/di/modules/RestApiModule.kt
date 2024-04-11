@@ -1,6 +1,6 @@
 package br.com.alura.anyflix.di.modules
 
-import br.com.alura.anyflix.network.services.MovieService
+import br.com.alura.anyflix.data.network.MovieService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +27,7 @@ interface RestApiModule{
 
         @Provides
         @Singleton
-        fun provideMovieService (retrofit: Retrofit): MovieService{
+        fun provideMovieService (retrofit: Retrofit): MovieService {
             return retrofit.create(MovieService::class.java)
         }
 
