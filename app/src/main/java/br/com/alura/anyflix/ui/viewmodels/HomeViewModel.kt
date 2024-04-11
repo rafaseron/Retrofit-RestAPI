@@ -35,12 +35,22 @@ class HomeViewModel @Inject constructor(private val dao: MovieDao, private val s
         currentUiStateJob = viewModelScope.launch {
             //dao.findAll()
             flow {
-                val response = service.getAll()
+                val listMovieResponse = service.getAll()
+                val listMovies = mutableListOf<Movie>()
+
+                for (movieResponse in listMovieResponse){
+                    val latestValue = movieResponse.toMovie()
+                    listMovies.add(latestValue)
+                }
+
+                emit(listMovies)
+                /*
                 val listMovies = response.map {
                     movieResponse ->
                     movieResponse.toMovie()
                 }
                 emit(listMovies)
+                */
             }
                 .onStart {
                     _uiState.update { HomeUiState.Loading }
