@@ -3,8 +3,9 @@ package br.com.alura.anyflix.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.alura.anyflix.room.dao.MovieDao
-import br.com.alura.anyflix.room.entities.toMovie
 import br.com.alura.anyflix.model.Movie
+import br.com.alura.anyflix.network.services.MovieService
+import br.com.alura.anyflix.network.services.toMovie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -19,7 +20,7 @@ sealed class HomeUiState {
 
 }
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val dao: MovieDao): ViewModel() {
+class HomeViewModel @Inject constructor(private val dao: MovieDao, private val service: MovieService): ViewModel() {
 
     private var currentUiStateJob: Job? = null
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -32,16 +33,23 @@ class HomeViewModel @Inject constructor(private val dao: MovieDao): ViewModel() 
     private fun loadUiState() {
         currentUiStateJob?.cancel()
         currentUiStateJob = viewModelScope.launch {
-            dao.findAll()
+            //dao.findAll()
+            flow {
+                val response = service.getAll()
+                val listMovies = response.map {
+                    movieResponse ->
+                    movieResponse.toMovie()
+                }
+                emit(listMovies)
+            }
                 .onStart {
                     _uiState.update { HomeUiState.Loading }
                 }
-                .map { entities ->
-                    val movies = entities.map { it.toMovie() }
-                    if (movies.isEmpty()) {
+                .map { listMovies ->
+                    if (listMovies.isEmpty()) {
                         emptyMap()
                     } else {
-                        createSections(movies)
+                        createSections(listMovies)
                     }
                 }.collectLatest { sections ->
                     if (sections.isEmpty()) {
