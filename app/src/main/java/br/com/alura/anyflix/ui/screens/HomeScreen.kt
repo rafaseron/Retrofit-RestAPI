@@ -28,7 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alura.anyflix.model.Movie
+import br.com.alura.anyflix.data.model.Movie
 import br.com.alura.anyflix.sampleData.sampleMovieSections
 import br.com.alura.anyflix.sampleData.sampleMovies
 import br.com.alura.anyflix.ui.components.AnyflixMainBanner

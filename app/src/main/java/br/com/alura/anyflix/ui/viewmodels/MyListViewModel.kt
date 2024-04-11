@@ -2,9 +2,9 @@ package br.com.alura.anyflix.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.alura.anyflix.room.dao.MovieDao
-import br.com.alura.anyflix.room.entities.toMovie
-import br.com.alura.anyflix.model.Movie
+import br.com.alura.anyflix.data.room.dao.MovieDao
+import br.com.alura.anyflix.data.room.entities.toMovie
+import br.com.alura.anyflix.data.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*

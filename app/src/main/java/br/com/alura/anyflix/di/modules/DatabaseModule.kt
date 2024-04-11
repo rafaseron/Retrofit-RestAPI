@@ -2,9 +2,10 @@ package br.com.alura.anyflix.di.modules
 
 import android.content.Context
 import androidx.room.Room
-import br.com.alura.anyflix.room.database.AnyflixDatabase
-import br.com.alura.anyflix.room.dao.MovieDao
-import br.com.alura.anyflix.room.repository.MovieRepository
+import br.com.alura.anyflix.data.network.MovieService
+import br.com.alura.anyflix.data.room.database.AnyflixDatabase
+import br.com.alura.anyflix.data.room.dao.MovieDao
+import br.com.alura.anyflix.data.repository.MovieRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,8 +32,8 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideMovieRepository(db: AnyflixDatabase): MovieRepository{
-        return MovieRepository(db)
+    fun provideMovieRepository(db: AnyflixDatabase, service: MovieService): MovieRepository {
+        return MovieRepository(db, service)
     }
 
 }

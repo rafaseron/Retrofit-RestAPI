@@ -1,7 +1,7 @@
 package br.com.alura.anyflix.sampleData
 
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
-import br.com.alura.anyflix.model.Movie
+import br.com.alura.anyflix.data.model.Movie
 import kotlin.random.Random
 
 val randomImage

@@ -1,14 +1,24 @@
-package br.com.alura.anyflix.room.repository
+package br.com.alura.anyflix.data.repository
 
-import br.com.alura.anyflix.model.Movie
-import br.com.alura.anyflix.room.database.AnyflixDatabase
-import br.com.alura.anyflix.room.entities.MovieEntity
+import br.com.alura.anyflix.data.model.Movie
+import br.com.alura.anyflix.data.network.MovieResponse
+import br.com.alura.anyflix.data.network.MovieService
+import br.com.alura.anyflix.data.room.database.AnyflixDatabase
+import br.com.alura.anyflix.data.room.entities.MovieEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class MovieRepository @Inject constructor(database: AnyflixDatabase) {
+class MovieRepository @Inject constructor(database: AnyflixDatabase, private val service: MovieService) {
     val movieDao = database.movieDao()
 
+
+    //CAMADA ONLINE
+    suspend fun getMoviesFromService(): Flow<List<MovieResponse>> = flow{
+        emit(service.getAll())
+    }
+
+    //CAMADA OFFLINE
     suspend fun insertMovie(movie: MovieEntity){
         return movieDao.save(movie)
     }

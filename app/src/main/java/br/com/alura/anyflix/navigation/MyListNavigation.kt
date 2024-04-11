@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import br.com.alura.anyflix.model.Movie
+import br.com.alura.anyflix.data.model.Movie
 import br.com.alura.anyflix.ui.screens.MyListScreen
 import br.com.alura.anyflix.ui.viewmodels.MyListViewModel
 import kotlinx.coroutines.launch

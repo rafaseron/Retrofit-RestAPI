@@ -1,9 +1,9 @@
-package br.com.alura.anyflix.room.database
+package br.com.alura.anyflix.data.room.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import br.com.alura.anyflix.room.dao.MovieDao
-import br.com.alura.anyflix.room.entities.MovieEntity
+import br.com.alura.anyflix.data.room.dao.MovieDao
+import br.com.alura.anyflix.data.room.entities.MovieEntity
 
 @Database(
     version = 1,

@@ -1,8 +1,8 @@
-package br.com.alura.anyflix.room.entities
+package br.com.alura.anyflix.data.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import br.com.alura.anyflix.model.Movie
+import br.com.alura.anyflix.data.model.Movie
 import java.util.UUID
 
 @Entity(tableName = "movies")
