@@ -10,18 +10,45 @@ import br.com.alura.anyflix.data.room.entities.MovieEntity
 import br.com.alura.anyflix.data.room.entities.toMovie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
 class MovieRepository @Inject constructor(database: AnyflixDatabase, private val service: MovieService) {
-    val movieDao = database.movieDao()
+    private val movieDao = database.movieDao()
 
 
     //CAMADA ONLINE
+    private suspend fun getMoviesFromService(): Flow<List<Movie>> = flow{
+        try {
+            val listMovie = mutableListOf<Movie>()
+            for (movieResponse in service.getAll()) {
+                listMovie.add(movieResponse.toMovie())
+            }
+            emit(listMovie)
+        } catch (e: Exception){
+            Log.e("MovieRepository", "Erro no getMoviesFromService -> ${e.message}")
+        }
+    }
+
+    private suspend fun getMyListFromService(): Flow<List<Movie>> = flow{
+        try {
+            val listMovie = mutableListOf<Movie>()
+            for (movieResponse in service.getMyList()) {
+                listMovie.add(movieResponse.toMovie())
+            }
+            emit(listMovie)
+        } catch (e: Exception){
+            Log.e("MovieRepository", "Erro no getMyListFromService -> ${e.message}")
+        }
+    }
+
+    //CAMADA MISTA - Service + Dao
     suspend fun getAllSections(): Flow<Map<String, List<Movie>>>{
 
         //recebe os filmes do Service e Salva no Dao
@@ -39,7 +66,7 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
 
         //retorna um Flow para o ViewModel -> para que ele atualize a Ui
         return movieDao.findAll().map {
-            listMovieEntity ->
+                listMovieEntity ->
             val listMovie = listMovieEntity.map { it.toMovie() }
             if (listMovie.isEmpty()) {
                 emptyMap()
@@ -49,16 +76,28 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
         }
     }
 
-
-    suspend fun getMoviesFromService(): Flow<List<Movie>> = flow{
+    suspend fun myMovieList(): Flow<List<Movie>>{
+        //recebe do Service e Salva no Dao
         try {
-            val listMovie = mutableListOf<Movie>()
-            for (movieResponse in service.getAll()) {
-                listMovie.add(movieResponse.toMovie())
+            CoroutineScope(coroutineContext).launch {
+                getMyListFromService().collect {
+                        listMovie ->
+                    for (movie in listMovie){
+                        movieDao.addToMyList(movie.id)
+                    }
+                }
             }
-            emit(listMovie)
         } catch (e: Exception){
-            Log.e("MovieRepository", "Erro no getMoviesFromService -> ${e.message}")
+            Log.e("MovieRepository", "myMovieList requisicao -> ${e.message}")
+        }
+
+        //retorna o conteudo do Dao - antes, tem que transformar Flow<List<MovieEntity>> para Flow<List<Movie>>
+        return movieDao.myList().map {
+            listMovieEntity ->
+            listMovieEntity.map {
+                movieEntity ->
+                movieEntity.toMovie()
+            }
         }
     }
 
@@ -78,15 +117,11 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
         return movieDao.findAll()
     }
 
-    fun myMovieList(): Flow<List<MovieEntity>>{
-        return movieDao.myList()
-    }
-
     suspend fun removeFromMyList(id: String){
         return movieDao.removeFromMyList(id)
     }
 
-    suspend fun addToMyList(id: String){
+    private suspend fun addToMyList(id: String){
         return movieDao.addToMyList(id)
     }
 
