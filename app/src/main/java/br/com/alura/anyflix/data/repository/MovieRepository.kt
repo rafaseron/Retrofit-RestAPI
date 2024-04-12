@@ -1,5 +1,6 @@
 package br.com.alura.anyflix.data.repository
 
+import android.util.Log
 import br.com.alura.anyflix.data.model.Movie
 import br.com.alura.anyflix.data.model.toMovieEntity
 import br.com.alura.anyflix.data.network.MovieService
@@ -9,10 +10,10 @@ import br.com.alura.anyflix.data.room.entities.MovieEntity
 import br.com.alura.anyflix.data.room.entities.toMovie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
@@ -24,13 +25,16 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
     suspend fun getAllSections(): Flow<Map<String, List<Movie>>>{
 
         //recebe os filmes do Service e Salva no Dao
-        CoroutineScope(coroutineContext).launch {
-            getMoviesFromService().collect{
-                listMovie ->
-                for(movie in listMovie){
-                   movieDao.save(movie.toMovieEntity())
+        try {
+            CoroutineScope(coroutineContext).launch {
+                getMoviesFromService().collect { listMovie ->
+                    for (movie in listMovie) {
+                        movieDao.save(movie.toMovieEntity())
+                    }
                 }
             }
+        } catch (e: Exception){
+            Log.e("MovieRepository", "Erro no getAllSections -> ${e.message}")
         }
 
         //retorna um Flow para o ViewModel -> para que ele atualize a Ui
@@ -47,11 +51,15 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
 
 
     suspend fun getMoviesFromService(): Flow<List<Movie>> = flow{
-        val listMovie = mutableListOf<Movie>()
-        for (movieResponse in service.getAll()){
-            listMovie.add(movieResponse.toMovie())
+        try {
+            val listMovie = mutableListOf<Movie>()
+            for (movieResponse in service.getAll()) {
+                listMovie.add(movieResponse.toMovie())
+            }
+            emit(listMovie)
+        } catch (e: Exception){
+            Log.e("MovieRepository", "Erro no getMoviesFromService -> ${e.message}")
         }
-        emit(listMovie)
     }
 
     //CAMADA DE REGRA DE NEGOCIO DA UI
