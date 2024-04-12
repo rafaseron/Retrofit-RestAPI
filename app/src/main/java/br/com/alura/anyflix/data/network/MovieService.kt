@@ -14,4 +14,7 @@ interface MovieService {
     @GET("movies")
     suspend fun getAll(): List<MovieResponse>
 
+    @GET("movies/myList")
+    suspend fun getMyList(): List<MovieResponse>
+
 }
