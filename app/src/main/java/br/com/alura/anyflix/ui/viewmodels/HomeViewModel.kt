@@ -2,10 +2,8 @@ package br.com.alura.anyflix.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.alura.anyflix.data.room.dao.MovieDao
 import br.com.alura.anyflix.data.model.Movie
-import br.com.alura.anyflix.data.network.MovieService
-import br.com.alura.anyflix.data.network.toMovie
+import br.com.alura.anyflix.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -20,7 +18,7 @@ sealed class HomeUiState {
 
 }
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val dao: MovieDao, private val service: MovieService): ViewModel() {
+class HomeViewModel @Inject constructor(private val repository: MovieRepository): ViewModel() {
 
     private var currentUiStateJob: Job? = null
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -33,34 +31,8 @@ class HomeViewModel @Inject constructor(private val dao: MovieDao, private val s
     private fun loadUiState() {
         currentUiStateJob?.cancel()
         currentUiStateJob = viewModelScope.launch {
-            //dao.findAll()
-            flow {
-                val listMovieResponse = service.getAll()
-                val listMovies = mutableListOf<Movie>()
-
-                for (movieResponse in listMovieResponse){
-                    val latestValue = movieResponse.toMovie()
-                    listMovies.add(latestValue)
-                }
-
-                emit(listMovies)
-                /*
-                val listMovies = response.map {
-                    movieResponse ->
-                    movieResponse.toMovie()
-                }
-                emit(listMovies)
-                */
-            }
-                .onStart {
+            repository.getAllSections().onStart {
                     _uiState.update { HomeUiState.Loading }
-                }
-                .map { listMovies ->
-                    if (listMovies.isEmpty()) {
-                        emptyMap()
-                    } else {
-                        createSections(listMovies)
-                    }
                 }.collectLatest { sections ->
                     if (sections.isEmpty()) {
                         _uiState.update {
@@ -84,11 +56,5 @@ class HomeViewModel @Inject constructor(private val dao: MovieDao, private val s
     fun loadSections() {
         loadUiState()
     }
-
-    private fun createSections(movies: List<Movie>) = mapOf(
-        "Em alta" to movies.shuffled().take(7),
-        "Novidades" to movies.shuffled().take(7),
-        "Continue assistindo" to movies.shuffled().take(7)
-    )
 
 }
