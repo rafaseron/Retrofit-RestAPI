@@ -2,9 +2,8 @@ package br.com.alura.anyflix.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.alura.anyflix.data.room.dao.MovieDao
-import br.com.alura.anyflix.data.room.entities.toMovie
 import br.com.alura.anyflix.data.model.Movie
+import br.com.alura.anyflix.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -17,7 +16,7 @@ sealed class MyListUiState {
     data class Success(val movies: List<Movie> = emptyList()): MyListUiState()
 }
 @HiltViewModel
-class MyListViewModel @Inject constructor(private val dao: MovieDao): ViewModel() {
+class MyListViewModel @Inject constructor(private val repository: MovieRepository): ViewModel() {
 
     private var currentUiStateJob: Job? = null
     private val _uiState = MutableStateFlow<MyListUiState>(MyListUiState.Loading)
@@ -31,12 +30,9 @@ class MyListViewModel @Inject constructor(private val dao: MovieDao): ViewModel(
         currentUiStateJob?.cancel()
         currentUiStateJob = viewModelScope.launch {
 
-            dao.myList()
-                .onStart {
+            repository.myMovieList().onStart {
                     _uiState.update { MyListUiState.Loading }
-                }
-                .map { entities -> entities.map { it.toMovie() } }
-                .collect { movies ->
+                }.collect { movies ->
                     _uiState.update {
                         if (movies.isEmpty()) {
                             MyListUiState.Empty
@@ -49,7 +45,7 @@ class MyListViewModel @Inject constructor(private val dao: MovieDao): ViewModel(
     }
 
     suspend fun removeFromMyList(movie: Movie) {
-        dao.removeFromMyList(movie.id)
+        repository.removeFromMyList(movie.id)
     }
 
     fun loadMyList() {
