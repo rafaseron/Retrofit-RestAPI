@@ -121,7 +121,7 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
         return movieDao.removeFromMyList(id)
     }
 
-    private suspend fun addToMyList(id: String){
+    suspend fun addToMyList(id: String){
         return movieDao.addToMyList(id)
     }
 
