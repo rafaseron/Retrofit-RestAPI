@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import br.com.alura.anyflix.ui.screens.CepScreen
 import br.com.alura.anyflix.ui.viewmodels.CepViewModel
 
-private const val cepRoute = "cepRoute"
+internal const val cepRoute = "cepRoute"
 fun NavGraphBuilder.cepScreenNavigation(){
 
     composable(route = cepRoute){

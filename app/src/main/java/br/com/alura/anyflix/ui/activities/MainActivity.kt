@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alura.anyflix.R
+import br.com.alura.anyflix.navigation.cepRoute
 import br.com.alura.anyflix.navigation.navHost.AnyflixNavHost
 import br.com.alura.anyflix.navigation.homeRoute
 import br.com.alura.anyflix.navigation.movieDetailsRouteFullpath
@@ -73,20 +74,22 @@ fun AnyflixApp(
     val selectedBottomAppBarItem = when (currentRoute) {
         homeRoute -> BottomAppBarItem.Home
         myListRoute -> BottomAppBarItem.MyList
+        cepRoute -> BottomAppBarItem.Cep
         else -> BottomAppBarItem.Home
     }
     val bottomAppBarItems = remember {
         listOf(
             BottomAppBarItem.Home,
-            BottomAppBarItem.MyList
+            BottomAppBarItem.MyList,
+            BottomAppBarItem.Cep
         )
     }
     val isShowBackNavigation = when (currentRoute) {
-        myListRoute, movieDetailsRouteFullpath -> true
+        myListRoute, movieDetailsRouteFullpath, cepRoute -> true
         else -> false
     }
     val isShowBottomAppBar = when (currentRoute) {
-        homeRoute, myListRoute -> true
+        homeRoute, myListRoute, cepRoute -> true
         else -> false
     }
     AnyflixApp(
@@ -116,6 +119,9 @@ fun AnyflixApp(
                             .size(30.dp),
                         contentScale = ContentScale.Crop
                     )
+                }
+                cepRoute ->{
+                    Text(text = "Cadastro de Endereço")
                 }
             }
         }

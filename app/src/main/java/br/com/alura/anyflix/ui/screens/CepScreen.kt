@@ -22,50 +22,48 @@ import br.com.alura.anyflix.ui.viewmodels.CepViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CepScreen(uiState: CepUiState, viewModel: CepViewModel) {
-    Column(modifier = Modifier.fillMaxSize(1f)) {
 
-        Text(
-            text = "Cadastro de Endereço",
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-            fontWeight = FontWeight(400), fontSize = 20.sp
-        )
+    Column(modifier = Modifier.padding(16.dp).fillMaxSize(1f).padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedTextField(value = uiState.cep, onValueChange = {viewModel.cepValueChange(it)},
-                modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Cep")})
+        Text(text = "Preencha apenas o CEP", modifier = Modifier, fontWeight = FontWeight(400), fontSize = 20.sp)
 
-            Spacer(modifier = Modifier)
+        Spacer(modifier = Modifier)
 
-            OutlinedTextField(value = uiState.logradouro, onValueChange = {viewModel.logradouroValueChange(it)},
-                modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Logradouro")})
+        OutlinedTextField(value = uiState.cep, onValueChange = {viewModel.cepValueChange(it)},
+            modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Cep")})
 
-            Spacer(modifier = Modifier)
+        Spacer(modifier = Modifier)
 
-            OutlinedTextField(value = uiState.numero, onValueChange = {viewModel.numeroValueChange(it)},
-                modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Numero")})
+        OutlinedTextField(value = uiState.logradouro, onValueChange = {viewModel.logradouroValueChange(it)},
+            modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Logradouro")})
 
-            Spacer(modifier = Modifier)
+        Spacer(modifier = Modifier)
 
-            OutlinedTextField(value = uiState.bairro, onValueChange = {viewModel.bairroValueChange(it)},
-                modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Bairro")})
+        OutlinedTextField(value = uiState.numero, onValueChange = {viewModel.numeroValueChange(it)},
+            modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Numero")})
 
-            Spacer(modifier = Modifier)
+        Spacer(modifier = Modifier)
 
-            OutlinedTextField(value = uiState.cidade, onValueChange = {viewModel.cidadeValueChange(it)},
-                modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Cidade")})
+        OutlinedTextField(value = uiState.bairro, onValueChange = {viewModel.bairroValueChange(it)},
+            modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Bairro")})
 
-            Spacer(modifier = Modifier)
+        Spacer(modifier = Modifier)
 
-            OutlinedTextField(value = uiState.estado, onValueChange = {viewModel.estadoValueChange(it)},
-                modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Estado")})
+        OutlinedTextField(value = uiState.cidade, onValueChange = {viewModel.cidadeValueChange(it)},
+            modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Cidade")})
 
-            Spacer(modifier = Modifier)
+        Spacer(modifier = Modifier)
 
-            OutlinedTextField(value = uiState.complemento, onValueChange = {viewModel.complementoValueChange(it)},
-                modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Complemento")})
+        OutlinedTextField(value = uiState.estado, onValueChange = {viewModel.estadoValueChange(it)},
+            modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Estado")})
 
-            Spacer(modifier = Modifier)
-        }
+        Spacer(modifier = Modifier)
+
+        OutlinedTextField(value = uiState.complemento, onValueChange = {viewModel.complementoValueChange(it)},
+            modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Complemento")})
+
+        Spacer(modifier = Modifier)
     }
 
 }
