@@ -23,10 +23,10 @@ interface MovieService {
     @GET("movies/{movieId}")
     suspend fun getMovieFromId(@Path("movieId") movieId: String): MovieResponse
 
-    @PUT("movies/removeFromMyList/movieId")
+    @PUT("movies/removeFromMyList/{movieId}")
     suspend fun removeMovieFromMyList(@Path("movieId") movieId: String): Response<Void>
 
-    @PUT("movies/addToMyList/movieId")
+    @PUT("movies/addToMyList/{movieId}")
     suspend fun addMovieToMyList(@Path("movieId") movieId: String): Response<Void>
 
 }
