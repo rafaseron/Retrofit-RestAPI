@@ -22,5 +22,8 @@ fun NavGraphBuilder.cepScreenNavigation(){
 }
 
 fun NavController.navigateToCepScreen(){
-    navigate(route = cepRoute)
+    navigate(route = cepRoute){
+        launchSingleTop = true
+        popUpTo(route = cepRoute)
+    }
 }
