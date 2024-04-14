@@ -17,7 +17,7 @@ fun NavGraphBuilder.cepScreenNavigation(){
         val viewModel = hiltViewModel<CepViewModel>()
         val uiState by viewModel.uiState.collectAsState()
 
-        CepScreen(uiState = uiState, viewModel = viewModel)
+        CepScreen(uiState = uiState, viewModel = viewModel, onButtonClick = {viewModel.onButtonClick()})
     }
 }
 

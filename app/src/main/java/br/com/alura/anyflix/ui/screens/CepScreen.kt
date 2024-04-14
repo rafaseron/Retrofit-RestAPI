@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -15,15 +16,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.alura.anyflix.data.repository.MovieRepository
 import br.com.alura.anyflix.ui.viewmodels.CepUiState
 import br.com.alura.anyflix.ui.viewmodels.CepViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CepScreen(uiState: CepUiState, viewModel: CepViewModel) {
+fun CepScreen(uiState: CepUiState, viewModel: CepViewModel, onButtonClick: () -> Unit = {}) {
 
-    Column(modifier = Modifier.padding(16.dp).fillMaxSize(1f).padding(8.dp),
+    Column(modifier = Modifier
+        .padding(16.dp)
+        .fillMaxSize(1f)
+        .padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
         Text(text = "Preencha apenas o CEP", modifier = Modifier, fontWeight = FontWeight(400), fontSize = 20.sp)
@@ -35,7 +38,7 @@ fun CepScreen(uiState: CepUiState, viewModel: CepViewModel) {
 
         Spacer(modifier = Modifier)
 
-        OutlinedTextField(value = uiState.logradouro, onValueChange = {viewModel.logradouroValueChange(it)},
+        OutlinedTextField(value = uiState.rua, onValueChange = {viewModel.logradouroValueChange(it)},
             modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Logradouro")})
 
         Spacer(modifier = Modifier)
@@ -64,6 +67,10 @@ fun CepScreen(uiState: CepUiState, viewModel: CepViewModel) {
             modifier = Modifier.fillMaxWidth(1f), label = { Text(text = "Complemento")})
 
         Spacer(modifier = Modifier)
+
+        Button(onClick = { onButtonClick() }) {
+            Text(text = "Preencher dados com meu Cep")
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-data class CepUiState(val cep: String = "", val logradouro: String = "", val numero: String = "", val bairro: String = "", val cidade: String = "",
+data class CepUiState(val cep: String = "", val rua: String = "", val numero: String = "", val bairro: String = "", val cidade: String = "",
                       val estado: String = "", val complemento: String = "")
 
 @HiltViewModel
@@ -16,12 +16,17 @@ class CepViewModel @Inject constructor(private val repository: MovieRepository):
     private val _uiState = MutableStateFlow(CepUiState())
     val uiState = _uiState.asStateFlow()
 
+
+    fun onButtonClick(){
+        //TODO fazer pesquisa na API aqui dentro, puxando o uiState.cep
+    }
+
     fun cepValueChange(newValue: String){
         _uiState.value = _uiState.value.copy(cep = newValue)
     }
 
     fun logradouroValueChange(newValue: String){
-        _uiState.value = _uiState.value.copy(logradouro = newValue)
+        _uiState.value = _uiState.value.copy(rua = newValue)
     }
 
     fun numeroValueChange(newValue: String){
