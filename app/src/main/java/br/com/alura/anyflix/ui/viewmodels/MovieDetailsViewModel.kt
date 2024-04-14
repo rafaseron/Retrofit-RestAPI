@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import br.com.alura.anyflix.data.room.dao.MovieDao
 import br.com.alura.anyflix.data.room.entities.toMovie
 import br.com.alura.anyflix.data.model.Movie
+import br.com.alura.anyflix.data.repository.MovieRepository
 import br.com.alura.anyflix.navigation.movieIdArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,7 +24,7 @@ sealed class MovieDetailsUiState {
 }
 
 @HiltViewModel
-class MovieDetailsViewModel @Inject constructor(private val savedStateHandle: SavedStateHandle, private val dao: MovieDao): ViewModel() {
+class MovieDetailsViewModel @Inject constructor(private val repository: MovieRepository, private val savedStateHandle: SavedStateHandle): ViewModel() {
 
     private var currentUiStateJob: Job? = null
     private val _uiState = MutableStateFlow<MovieDetailsUiState>(MovieDetailsUiState.Loading)
@@ -37,7 +38,7 @@ class MovieDetailsViewModel @Inject constructor(private val savedStateHandle: Sa
     private fun loadUiState() {
         currentUiStateJob?.cancel()
         currentUiStateJob = viewModelScope.launch {
-            dao.findMovieById(
+            repository.findMovieById(
                 requireNotNull(
                     savedStateHandle[movieIdArgument]
                 )
@@ -46,7 +47,7 @@ class MovieDetailsViewModel @Inject constructor(private val savedStateHandle: Sa
             }.map {
                 it.toMovie()
             }.flatMapLatest { movie ->
-                dao.suggestedMovies(movie.id)
+                repository.suggestedMovies(movie.id)
                     .map { suggestedMovies ->
                         MovieDetailsUiState.Success(
                             movie = movie,
@@ -60,11 +61,11 @@ class MovieDetailsViewModel @Inject constructor(private val savedStateHandle: Sa
     }
 
     suspend fun addToMyList(movie: Movie) {
-        dao.addToMyList(movie.id)
+        repository.addToMyList(movie.id)
     }
 
     suspend fun removeFromMyList(movie: Movie) {
-        dao.removeFromMyList(movie.id)
+        repository.removeFromMyList(movie.id)
     }
 
     fun loadMovie() {
