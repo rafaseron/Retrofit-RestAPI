@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -18,6 +19,7 @@ interface RestApiModule{
     companion object{
         @Provides
         @Singleton
+        @Named("Retrofit1")
         fun provideRetrofit(client: OkHttpClient): Retrofit {
             return Retrofit.Builder()
                 .baseUrl("http://192.168.100.36:8080/")
@@ -28,6 +30,7 @@ interface RestApiModule{
 
         @Provides
         @Singleton
+        @Named("ViaCep")
         fun provideViaCepRetrofit(client: OkHttpClient): Retrofit {
             return Retrofit.Builder()
                 .baseUrl("https://viacep.com.br/ws/")
@@ -38,13 +41,13 @@ interface RestApiModule{
 
         @Provides
         @Singleton
-        fun provideMovieService (retrofit: Retrofit): MovieService {
+        fun provideMovieService (@Named("Retrofit1") retrofit: Retrofit): MovieService {
             return retrofit.create(MovieService::class.java)
         }
 
         @Provides
         @Singleton
-        fun provideCepService(retrofit: Retrofit): CepService{
+        fun provideCepService(@Named("ViaCep") retrofit: Retrofit): CepService{
             return retrofit.create(CepService::class.java)
         }
 
