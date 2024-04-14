@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +32,11 @@ sealed class BottomAppBarItem(
     object MyList : BottomAppBarItem(
         Icons.Default.List,
         "Minha lista"
+    )
+
+    object Cep: BottomAppBarItem(
+        icon = Icons.Default.LocationOn,
+        label = "CEP"
     )
 }
 
@@ -80,7 +86,8 @@ fun AnyflixBottomAppBarPreview() {
                 selectedItem = BottomAppBarItem.Home,
                 items = listOf(
                     BottomAppBarItem.Home,
-                    BottomAppBarItem.MyList
+                    BottomAppBarItem.MyList,
+                    BottomAppBarItem.Cep
                 )
             )
         }
