@@ -1,7 +1,9 @@
 package br.com.alura.anyflix.data.network
 
 import br.com.alura.anyflix.data.model.Movie
+import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 
@@ -20,5 +22,11 @@ interface MovieService {
 
     @GET("movies/{movieId}")
     suspend fun getMovieFromId(@Path("movieId") movieId: String): MovieResponse
+
+    @PUT("movies/removeFromMyList/movieId")
+    suspend fun removeMovieFromMyList(@Path("movieId") movieId: String): Response<Void>
+
+    @PUT("movies/addToMyList/movieId")
+    suspend fun addMovieToMyList(@Path("movieId") movieId: String): Response<Void>
 
 }
