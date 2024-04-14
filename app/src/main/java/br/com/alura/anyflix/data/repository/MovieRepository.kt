@@ -3,17 +3,19 @@ package br.com.alura.anyflix.data.repository
 import android.util.Log
 import br.com.alura.anyflix.data.model.Movie
 import br.com.alura.anyflix.data.model.toMovieEntity
+import br.com.alura.anyflix.data.network.MovieResponse
 import br.com.alura.anyflix.data.network.MovieService
 import br.com.alura.anyflix.data.network.toMovie
 import br.com.alura.anyflix.data.room.database.AnyflixDatabase
 import br.com.alura.anyflix.data.room.entities.MovieEntity
 import br.com.alura.anyflix.data.room.entities.toMovie
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
@@ -45,6 +47,14 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
             emit(listMovie)
         } catch (e: Exception){
             Log.e("MovieRepository", "Erro no getMyListFromService -> ${e.message}")
+        }
+    }
+
+    private suspend fun getMovieByIdFromService(movieId: String): Flow<MovieResponse> = flow{
+        try {
+            emit(service.getMovieFromId(movieId))
+        }catch (e: Exception){
+            Log.e("MovieRepository", "getMovieByIdFromService Error -> ${e.message}")
         }
     }
 
@@ -101,6 +111,25 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
         }
     }
 
+    suspend fun findMovieById(id: String): Flow<Movie>{
+        //recebe do Service
+        try {
+            val receivedMovieFromService = getMovieByIdFromService(id) //aqui recebemos um Flow<MovieResponse>. Precisaremos transformar para salvar no Dao e/ou exibir na tela
+            receivedMovieFromService.collect{ //tem que usar .collect{ }, first() cancela o emit() recebido e ai o flow é abortado
+                movieResponse ->
+                movieDao.save(movieResponse.toMovie().toMovieEntity())  //conversao de type para salvar no Dao
+            }
+        }catch (e: Exception){
+            Log.e("MovieRepository", "findMovieById Error -> ${e.message}")
+        }
+
+        //retorna do Dao para o ViewModel - antes, converte de MovieEntity para Movie
+        return movieDao.findMovieById(id)
+            .map {
+                it.toMovie()
+            }
+    }
+
     //CAMADA DE REGRA DE NEGOCIO DA UI
     private fun createSections(movies: List<Movie>) = mapOf(
         "Em alta" to movies.shuffled().take(7),
@@ -123,10 +152,6 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
 
     suspend fun addToMyList(id: String){
         return movieDao.addToMyList(id)
-    }
-
-    fun findMovieById(id: String): Flow<MovieEntity>{
-        return movieDao.findMovieById(id)
     }
 
     fun suggestedMovies(id: String): Flow<List<Movie>>{
