@@ -44,8 +44,6 @@ class MovieDetailsViewModel @Inject constructor(private val repository: MovieRep
                 )
             ).onStart {
                 _uiState.update { MovieDetailsUiState.Loading }
-            }.map {
-                it.toMovie()
             }.flatMapLatest { movie ->
                 repository.suggestedMovies(movie.id)
                     .map { suggestedMovies ->
