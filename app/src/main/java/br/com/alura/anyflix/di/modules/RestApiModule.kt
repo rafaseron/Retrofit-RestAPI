@@ -1,5 +1,6 @@
 package br.com.alura.anyflix.di.modules
 
+import br.com.alura.anyflix.data.network.CepService
 import br.com.alura.anyflix.data.network.MovieService
 import dagger.Module
 import dagger.Provides
@@ -27,8 +28,24 @@ interface RestApiModule{
 
         @Provides
         @Singleton
+        fun provideViaCepRetrofit(client: OkHttpClient): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl("https://viacep.com.br/ws/")
+                .addConverterFactory(MoshiConverterFactory.create())
+                .client(client)
+                .build()
+        }
+
+        @Provides
+        @Singleton
         fun provideMovieService (retrofit: Retrofit): MovieService {
             return retrofit.create(MovieService::class.java)
+        }
+
+        @Provides
+        @Singleton
+        fun provideCepService(retrofit: Retrofit): CepService{
+            return retrofit.create(CepService::class.java)
         }
 
         @Provides
