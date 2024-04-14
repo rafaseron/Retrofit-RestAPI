@@ -130,6 +130,30 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
             }
     }
 
+    suspend fun removeFromMyList(id: String){
+        CoroutineScope(coroutineContext).launch {
+            try {
+                service.removeMovieFromMyList(id)
+                movieDao.removeFromMyList(id)
+            }catch (e: Exception){
+                Log.e("MovieRepository", "removeFromMyList Error -> ${e.message}")
+            }
+        }
+
+        return movieDao.removeFromMyList(id)
+    }
+
+    suspend fun addToMyList(id: String){
+        CoroutineScope(coroutineContext).launch {
+            try {
+                service.addMovieToMyList(id)
+                movieDao.addToMyList(id)
+            }catch (e: Exception){
+                Log.e("MovieRepository", "addToMyList Error -> ${e.message}")
+            }
+        }
+    }
+
     //CAMADA DE REGRA DE NEGOCIO DA UI
     private fun createSections(movies: List<Movie>) = mapOf(
         "Em alta" to movies.shuffled().take(7),
@@ -144,14 +168,6 @@ class MovieRepository @Inject constructor(database: AnyflixDatabase, private val
 
     fun getAllMovies(): Flow<List<MovieEntity>>{
         return movieDao.findAll()
-    }
-
-    suspend fun removeFromMyList(id: String){
-        return movieDao.removeFromMyList(id)
-    }
-
-    suspend fun addToMyList(id: String){
-        return movieDao.addToMyList(id)
     }
 
     fun suggestedMovies(id: String): Flow<List<Movie>>{
