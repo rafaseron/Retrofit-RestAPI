@@ -14,6 +14,7 @@ import br.com.alura.anyflix.navigation.movieDetailsRouteFullpath
 import br.com.alura.anyflix.navigation.movieDetailsScreen
 import br.com.alura.anyflix.navigation.myListRoute
 import br.com.alura.anyflix.navigation.myListScreen
+import br.com.alura.anyflix.navigation.navigateToCepScreen
 import br.com.alura.anyflix.navigation.navigateToHome
 import br.com.alura.anyflix.navigation.navigateToMovieDetails
 import br.com.alura.anyflix.navigation.navigateToMyList
@@ -86,7 +87,7 @@ fun NavController.navigateToBottomAppBarItem(
         }
 
         BottomAppBarItem.Cep -> {
-            //TODO navigateToCep
+            navigateToCepScreen()
         }
     }
 }
