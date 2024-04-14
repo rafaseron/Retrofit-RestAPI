@@ -72,6 +72,6 @@ fun CepScreen(uiState: CepUiState, viewModel: CepViewModel) {
 
 @Preview(showBackground = true)
 @Composable
-private fun cepPreview() {
-    //cepScreen(uiState = CepUiState("", "", "", "", "", "", ""))
+private fun CepPreview() {
+    //CepScreen(uiState = CepUiState("", "", "", "", "", "", ""))
 }
