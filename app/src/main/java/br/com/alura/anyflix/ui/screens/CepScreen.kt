@@ -21,7 +21,7 @@ import br.com.alura.anyflix.ui.viewmodels.CepViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun cepScreen(uiState: CepUiState, viewModel: CepViewModel) {
+fun CepScreen(uiState: CepUiState, viewModel: CepViewModel) {
     Column(modifier = Modifier.fillMaxSize(1f)) {
 
         Text(
