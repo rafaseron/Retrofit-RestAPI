@@ -1,24 +1,31 @@
 package br.com.alura.anyflix.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import br.com.alura.anyflix.data.repository.MovieRepository
+import androidx.lifecycle.viewModelScope
+import br.com.alura.anyflix.data.repository.CepRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CepUiState(val cep: String = "", val rua: String = "", val numero: String = "", val bairro: String = "", val cidade: String = "",
                       val estado: String = "", val complemento: String = "")
 
 @HiltViewModel
-class CepViewModel @Inject constructor(private val repository: MovieRepository): ViewModel(){
+class CepViewModel @Inject constructor(private val service: CepRepository): ViewModel(){
 
     private val _uiState = MutableStateFlow(CepUiState())
     val uiState = _uiState.asStateFlow()
 
 
-    fun onButtonClick(){
-        //TODO fazer pesquisa na API aqui dentro, puxando o uiState.cep
+    suspend fun onButtonClick(){
+        viewModelScope.launch {
+            service.getAddressFromCep(uiState.value.cep).collect{
+                cepModel ->
+                _uiState.value = _uiState.value.copy(rua = cepModel.rua, numero = cepModel.numero, bairro = cepModel.bairro, cidade = cepModel.cidade, estado = cepModel.estado)
+            }
+        }
     }
 
     fun cepValueChange(newValue: String){
