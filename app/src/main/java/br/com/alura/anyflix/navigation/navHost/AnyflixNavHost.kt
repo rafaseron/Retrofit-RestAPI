@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import br.com.alura.anyflix.navigation.cepScreenNavigation
 import br.com.alura.anyflix.navigation.homeRoute
 import br.com.alura.anyflix.navigation.homeScreen
 import br.com.alura.anyflix.navigation.movieDetailsRouteFullpath
@@ -58,6 +59,8 @@ fun AnyflixNavHost(
                 navController.navigateToMovieDetails(it.id)
             }
         )
+
+        cepScreenNavigation()
     }
 }
 
@@ -80,6 +83,10 @@ fun NavController.navigateToBottomAppBarItem(
                     popUpTo(myListRoute)
                 }
             )
+        }
+
+        BottomAppBarItem.Cep -> {
+            //TODO navigateToCep
         }
     }
 }
